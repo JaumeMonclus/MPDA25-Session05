@@ -12,23 +12,18 @@ import Rhino.Geometry as rg
 import numpy as np
 from numpy import true_divide
 from System.Collections.Generic import List
-
-
-
 import ghpythonlib.treehelpers as th # type: ignore
 import ghpythonlib.components as comps # type: ignore
 import graph_helpers as graph 
-from System.Collections.Generic import List
-
 
 m = cast(rg.Mesh, m)  # type: ignore
 p = cast(rg.Point3d, p)
 
-
-
 class PathStripper:
 
     def __init__(self, mesh, paths, points):
+
+        '''Initializes the PathStripper class with a mesh, paths, and points.'''
 
         self.mesh = mesh
         self.paths_tree   = paths
@@ -38,6 +33,8 @@ class PathStripper:
         self.cull_pattern = []
 
     def compute_indexes(self):             
+
+        '''Computes the indexes of the paths in the mesh and a Culling pattern.'''
         
         self.indexes      = []
         self.cull_pattern = []
@@ -55,9 +52,8 @@ class PathStripper:
 
 
     def get_filtered_lists(self):
-        
-            if not self.cull_pattern:
-                self.compute_indexes()
+            
+            '''Filters the paths based on the culling pattern.'''
 
             filtered = []
             for keep, path in zip(self.cull_pattern, self.points.Paths):
@@ -71,6 +67,8 @@ class PathStripper:
 
 
     def compute_polylines(self):
+            
+            '''Computes the polylines from the filtered paths.'''
         
             self.polylines = []
             for raw_branch in self.get_filtered_lists():
@@ -80,6 +78,9 @@ class PathStripper:
             return self.polylines
     
     def compute_distances(self):
+
+        '''Computes many things, but we keep the "Checked_distances" of the polylines and their endpoints.'''
+        '''Checked_distances are the distances of the polylines minus the distances of their endpoints.'''
 
         self.distances = []
         self.endpoint_distances = []
@@ -103,6 +104,8 @@ class PathStripper:
     
     def compute_sorting(self):
 
+        '''Sorts the ordred indexes based on the checked distances.'''
+
         paired = list(zip(self.checked_distances, self.indexes))
         paired_sorted = sorted(paired, key=lambda x: x[0])
 
@@ -115,6 +118,8 @@ class PathStripper:
     
     def unpack_first_branch(self):
 
+        '''Anf finally, unpacks the first branch of the ordered indexes.'''
+
         self.list_lengths   = [len(branch) for branch in self.ordered_indexes]
         self.flattened_indexes = [item for branch in self.ordered_indexes for item in branch]
 
@@ -122,12 +127,19 @@ class PathStripper:
         first_branch = self.flattened_indexes[:first_len]
 
         return first_branch
+    
 
 
-a       = PathStripper(m, s, p)
-compute_indexes = a.compute_indexes()
-get_filtered_lists = a.get_filtered_lists()
-compute_polylines = a.compute_polylines()
-compute_distances = a.compute_distances()
-compute_sorting = a.compute_sorting()
+    
+                        ###############   
+                        ### OUTPUTS ###
+                        ###############   
+
+
+a                        = PathStripper(m, s, p)
+compute_indexes          = a.compute_indexes()
+get_filtered_lists       = a.get_filtered_lists()
+compute_polylines        = a.compute_polylines()
+compute_distances        = a.compute_distances()
+compute_sorting          = a.compute_sorting()
 unpack_branches_to_lists = a.unpack_first_branch()
