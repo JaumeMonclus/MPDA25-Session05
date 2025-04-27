@@ -15,6 +15,9 @@ from System.Collections.Generic import List
 import ghpythonlib.treehelpers as th # type: ignore
 import ghpythonlib.components as comps # type: ignore
 import graph_helpers as graph 
+# from Grasshopper.Kernel.Data import DataTree, GH_Path
+
+
 
 m = cast(rg.Mesh, m)  # type: ignore
 p = cast(rg.Point3d, p)
@@ -128,7 +131,6 @@ class PathStripper:
 
         return first_branch
     
-
 
     
                         ###############   

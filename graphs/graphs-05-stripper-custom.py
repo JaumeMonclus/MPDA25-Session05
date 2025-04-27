@@ -16,6 +16,7 @@ import graph_helpers as graph
 # DECLARE INPUT VARIABLES OF PYTHON COMPONENT
 m = cast(rg.Mesh, m)  # type: ignore
 s = cast(int, s)  # type: ignore
+# p = cast(rg.Point3d,p)
 
 
 
